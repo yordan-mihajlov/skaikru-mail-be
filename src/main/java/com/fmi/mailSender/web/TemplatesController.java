@@ -3,17 +3,15 @@ package com.fmi.mailSender.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.fmi.mailSender.services.TemplatesService;
 import com.fmi.mailSender.web.resources.EmailTemplate;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class TemplatesController {
 
@@ -21,8 +19,10 @@ public class TemplatesController {
 	private TemplatesService templatesService;
 
 	@PostMapping(path = "/add-template", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void addTemplate(@RequestBody EmailTemplate emailTemplate) {
+	public ResponseEntity<EmailTemplate> addTemplate(@RequestBody EmailTemplate emailTemplate) {
 		templatesService.saveTemplate(emailTemplate);
+
+		return new ResponseEntity<>(emailTemplate, HttpStatus.CREATED);
 	}
 	
 	@GetMapping(path = "/fetch-templates", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
