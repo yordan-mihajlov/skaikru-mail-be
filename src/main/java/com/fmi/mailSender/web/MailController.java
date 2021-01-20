@@ -4,6 +4,7 @@ package com.fmi.mailSender.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import com.fmi.mailSender.services.MailService;
 import com.fmi.mailSender.web.resources.Recipient;
 import com.fmi.mailSender.web.resources.SendMailRequest;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class MailController {
 	
@@ -26,7 +28,7 @@ public class MailController {
 		
 		int errorsCount = 0;
 		
-		for(Recipient recipient : sendMailRequest.getEmails()) {
+		for(Recipient recipient : sendMailRequest.getRecipients()) {
 			try{
 				mailService.sendMail(username, recipient.getEmail(), sendMailRequest.getTitle(), 
 								mailService.buildMail(sendMailRequest.getMessage(), recipient.getPlaceholders()));
@@ -35,6 +37,6 @@ public class MailController {
 			}
 		}
 
-		return sendMailRequest.getEmails().size() - errorsCount;
+		return sendMailRequest.getRecipients().size() - errorsCount;
 	}
 }

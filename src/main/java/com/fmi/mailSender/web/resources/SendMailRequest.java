@@ -8,5 +8,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class SendMailRequest extends EmailTemplate{
-	private List<Recipient> emails;
+	private List<Recipient> recipients;
 }
