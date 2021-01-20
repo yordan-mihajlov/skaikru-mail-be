@@ -1,9 +1,10 @@
 package com.fmi.mailSender.web;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,27 +17,27 @@ import com.fmi.mailSender.web.resources.SendMailRequest;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class MailController {
-	
+
 	@Value("${username}")
 	private String username;
-	
+
 	@Autowired
 	private MailService mailService;
 
-	@PostMapping(path= "/send-mails", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Integer sendMail(@RequestBody SendMailRequest sendMailRequest) {
-		
+	@PostMapping(path = "/send-mails", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Integer> sendMail(@RequestBody SendMailRequest sendMailRequest) {
+
 		int errorsCount = 0;
-		
-		for(Recipient recipient : sendMailRequest.getRecipients()) {
-			try{
-				mailService.sendMail(username, recipient.getEmail(), sendMailRequest.getTitle(), 
-								mailService.buildMail(sendMailRequest.getMessage(), recipient.getPlaceholders()));
+
+		for (Recipient recipient : sendMailRequest.getRecipients()) {
+			try {
+				mailService.sendMail(username, recipient.getEmail(), sendMailRequest.getTitle(),
+						mailService.buildMail(sendMailRequest.getMessage(), recipient.getPlaceholders()));
 			} catch (Exception e) {
 				errorsCount++;
 			}
 		}
 
-		return sendMailRequest.getRecipients().size() - errorsCount;
+		return new ResponseEntity<>(sendMailRequest.getRecipients().size() - errorsCount, HttpStatus.ACCEPTED);
 	}
 }

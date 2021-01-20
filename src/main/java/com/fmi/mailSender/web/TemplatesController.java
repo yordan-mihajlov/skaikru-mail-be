@@ -24,14 +24,16 @@ public class TemplatesController {
 
 		return new ResponseEntity<>(emailTemplate, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping(path = "/fetch-templates", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<EmailTemplate> fetchTemplate() {
-		return templatesService.fetchTemplates();
+	public ResponseEntity<List<EmailTemplate>> fetchTemplate() {
+		return new ResponseEntity<>(templatesService.fetchTemplates(), HttpStatus.OK);
 	}
-	
-	@DeleteMapping(path = "/{title}/delete-template", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteTemplate(@PathVariable(value = "title") String title) {
+
+	@DeleteMapping(path = "/{title}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> deleteTemplate(@PathVariable(value = "title") String title) {
 		templatesService.deleteTemplate(title);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
