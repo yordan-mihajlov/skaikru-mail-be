@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,8 @@ public class TemplatesServiceImpl implements TemplatesService {
 
 	@Value("${templates.dir}")
 	private String templatesDir;
+	@Value("${templates.trash.dir}")
+	private String templatesTrashDir;
 
 	@Override
 	public void saveTemplate(EmailTemplate emailTemplate) {
@@ -49,7 +52,7 @@ public class TemplatesServiceImpl implements TemplatesService {
 	@Override
 	public void deleteTemplate(String title) {
 		try {
-			Files.deleteIfExists(Paths.get(templatesDir + title + ".json"));
+			Files.move(Paths.get(templatesDir + title + ".json"), Paths.get(templatesTrashDir + title + ".json"), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
