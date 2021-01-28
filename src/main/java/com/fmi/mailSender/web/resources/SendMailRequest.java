@@ -9,4 +9,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class SendMailRequest extends EmailTemplate{
 	private List<Recipient> recipients;
+	private boolean isHtml;
 }

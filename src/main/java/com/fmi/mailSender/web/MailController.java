@@ -36,7 +36,7 @@ public class MailController {
 		for (Recipient recipient : sendMailRequest.getRecipients()) {
 			try {
 				mailService.sendMail(username, recipient.getEmail(), sendMailRequest.getTitle(),
-						mailService.buildMail(sendMailRequest.getMessage(), recipient.getPlaceholders()));
+						mailService.buildMail(sendMailRequest.getMessage(), recipient.getPlaceholders()), sendMailRequest.isHtml());
 			} catch (Exception e) {
 				errorsCount++;
 			}

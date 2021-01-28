@@ -21,13 +21,17 @@ public class MailServiceImpl implements MailService {
 	private MailConfig mailConfig;
 
 	@Override
-	public void sendMail(String from, String to, String subject, String content) {
+	public void sendMail(String from, String to, String subject, String content, boolean isHtml) {
 		try {
 			Message message = new MimeMessage(mailConfig.createSMTPSession());
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message.setSubject(subject);
-			message.setText(content);
+			if (isHtml) {
+				message.setContent(content, "text/html");
+			} else {
+				message.setText(content);
+			}
 
 			Transport.send(message);
 		} catch (MessagingException e) {
