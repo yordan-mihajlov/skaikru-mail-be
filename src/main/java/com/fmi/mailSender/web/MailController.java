@@ -20,7 +20,7 @@ import com.fmi.mailSender.web.resources.PreviewRecipientEmail;
 import com.fmi.mailSender.web.resources.Recipient;
 import com.fmi.mailSender.web.resources.SendMailRequest;
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class MailController {
 
